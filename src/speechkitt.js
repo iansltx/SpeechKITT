@@ -51,6 +51,9 @@
   // DOM elements
   var _guiNodes;
 
+  // element ID to attach to
+  var _attachTo;
+
   // Checks if GUI was already created
   var _guiCreated = function () {
     return _guiNodes !== undefined;
@@ -124,7 +127,12 @@
     _guiNodes.id = 'skitt-ui';
     _guiNodes.innerHTML = '<a id="skitt-toggle-button">&nbsp;</a><label for="skitt-toggle-button" id="skitt-toggle-button__label">'+_toggleLabelText+'</label><div id="skitt-listening-box"><div id="skitt-listening-text"><span id="skitt-listening-text__instructions">'+_listeningInstructionsText+'</span></div></div>';
     _guiNodes.style.display = 'none';
-    document.body.appendChild(_guiNodes);
+
+    if (_attachTo) {
+        document.getElementById(_attachTo).appendChild(_guiNodes);
+    } else {
+        document.body.appendChild(_guiNodes);
+    }
 
     _updateListeningText();
 
@@ -366,6 +374,18 @@
     setStylesheet: function(css) {
       _stylesheet = css;
       _updateStylesheet();
+    },
+
+    /**
+     * Specify an element ID where you want to render the KITT control into,
+     * rather than writing it to the body as soon ad render() is called.
+     *
+     * @method attachTo
+     * @param elementId string the element ID to attach the UI to, or null to
+     * write to the document body
+     */
+    attachTo: function(elementId) {
+      _attachTo = elementId;
     },
 
     /**
